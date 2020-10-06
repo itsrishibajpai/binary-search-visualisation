@@ -1,133 +1,152 @@
 var arr = [];
+var start, mid, last;
+var counter = 0;
+var start_p = 0;
+var last_p = 0;
+var bb = 0;
+var element = 0;
+var i = 0;
+start = 1;
+//var last = parseInt(document.getElementById("length").value);
 function next() {
-  execute();
-  var speed = document.getElementById("speed").selectedIndex;
+  if (counter == 0) {
+    execute();
+  }
+  //var speed = document.getElementById("speed").selectedIndex;
   //  var strUser = e.options[].selectedIndex;
   //  alert();
   document.getElementById("step-tracker").style.visibility = "visible";
-  var start, mid, last;
 
-  start = 1;
   var element = document.getElementById("enter").value;
-  last = parseInt(document.getElementById("length").value);
-  if (speed == 1) {
-    var time = 4000;
-  } else if (speed == 2) {
-    var time = 6000;
-  } else {
-    var time = 2000;
-  }
-  var start_time = 1000;
-  var counter = 0;
-  var start_p = 0;
-  var last_p = 0;
-  var bb = 0;
-  for (var i = 0; i < arr.length; i++) {
-    setTimeout(() => {
-      var mm = (start + last) / 2;
 
-      if (mm == 1.5) {
-        mid = 1;
-      } else {
-        mid = Math.round(mm);
-      }
-      if (start_p != 0) {
-        document.getElementById("r" + start_p).style.backgroundColor =
-          "#444444";
-      }
-      if (last_p != 0) {
-        document.getElementById("r" + last_p).style.backgroundColor = "#444444";
-      }
-      document.getElementById("r" + start).style.backgroundColor = "#00b92b";
-      document.getElementById("r" + mid).style.backgroundColor = "#ffd000";
-      document.getElementById("r" + last).style.backgroundColor = "#ff0730";
-      document.getElementById("start-val").innerHTML = "  " + (start - 1);
-      document.getElementById("mid").innerHTML = "  " + (mid - 1);
-      document.getElementById("last").innerHTML = "  " + (last - 1);
-      //  alert(counter);
+  //if (speed == 1) {
+  //var time = 4000;
+  //} else if (speed == 2) {
+  //var time = 6000;
+  //} else {
+  // var time = 2000;
+  //}
+  //var start_time = 1000;
 
-      if (counter != 0) {
-        document.getElementById("r" + counter).style.backgroundColor =
-          "#444444";
-      }
+  //for (var i = 0; i < arr.length; i++) {
+  //setTimeout(() => {
+
+  if (bb == 0) {
+    var mm = (start + last) / 2;
+
+    if (mm == 1.5) {
+      mid = 1;
+    } else {
+      mid = Math.round(mm);
+    }
+    if (start_p != 0) {
+      document.getElementById("r" + start_p).style.backgroundColor = "#444444";
+    }
+    if (last_p != 0) {
+      document.getElementById("r" + last_p).style.backgroundColor = "#444444";
+    }
+    document.getElementById("r" + start).style.backgroundColor = "#00b92b";
+    document.getElementById("r" + mid).style.backgroundColor = "#ffd000";
+    document.getElementById("r" + last).style.backgroundColor = "#ff0730";
+    document.getElementById("start-val").innerHTML = "  " + (start - 1);
+    document.getElementById("mid").innerHTML = "  " + (mid - 1);
+    document.getElementById("last").innerHTML = "  " + (last - 1);
+    //  alert(counter);
+
+    if (counter != 0) {
+      document.getElementById("r" + counter).style.backgroundColor = "#444444";
+    }
+    $("#r" + counter)
+      .find("div")
+      .first()
+      .remove();
+
+    counter = mid;
+    document.getElementById("r" + mid).style.backgroundColor = "#ffd000";
+    $("#r" + mid).append(
+      '<div  class="high">' + document.getElementById("enter").value + " </div>"
+    );
+    // op.innerHTML = "start" + start + "Mid" + mid + "lst=" + last;
+    //  alert(arr[mid - 1]);
+    document.getElementById("explanation").style.visibility = "hidden";
+    if (arr[mid - 1] == element) {
       $("#r" + counter)
         .find("div")
         .first()
         .remove();
+      //    document.getElementById("output").innerHTML = start + mid + last;
+      var elec = document.getElementById("enter").value;
+      $("#r" + mid).append('<div  class="high">' + element + "  </div>");
+      document.getElementById("label1").style.color = "green";
+      document.getElementById("label1").innerHTML =
+        "Item Found at index :" + (mid - 1);
+      document.getElementById("explanation").style.visibility = "visible";
+      document.getElementById("explanation").innerHTML =
+        "<center>Step 6: EXIT</center>";
+      start = last + 1;
+      bb = 1;
+      clearInterval(interval);
+    } else if (parseInt(arr[mid - 1]) < element && bb == 0) {
+      //right
 
-      counter = mid;
-      document.getElementById("r" + mid).style.backgroundColor = "#ffd000";
-      $("#r" + mid).append(
-        '<div  class="high">' +
-          document.getElementById("enter").value +
-          " </div>"
-      );
-      // op.innerHTML = "start" + start + "Mid" + mid + "lst=" + last;
-      //  alert(arr[mid - 1]);
-      document.getElementById("explanation").style.visibility = "hidden";
-      if (arr[mid - 1] == element) {
-        $("#r" + counter)
-          .find("div")
-          .first()
-          .remove();
-        //    document.getElementById("output").innerHTML = start + mid + last;
-        var elec = document.getElementById("enter").value;
-        $("#r" + mid).append('<div  class="high">' + element + "  </div>");
-        document.getElementById("label1").style.color = "green";
+      document.getElementById("explanation").style.color = "red";
+      document.getElementById("explanation").style.visibility = "visible";
+      document.getElementById(
+        "explanation"
+      ).innerHTML = `<center> Step 4: IF A[MID] = VAL <br/>
+    SET POS = MID <br/>
+    PRINT POS<br/>
+    Go to Step 6<br/>
+    ELSE IF A[MID] > VAL<br/>
+    SET END = MID - 1<br/>
+    ELSE<br/>
+    SET BEG = MID + 1 <br/>
+    [END OF IF] <br/>
+    [END OF LOOP]</center>`;
+      start_p = start;
+      start = mid + 1;
+    } else if (parseInt(arr[mid - 1]) > element && bb == 0) {
+      //left
+      // document.getElementById("explanation").style.color = "red";
+      document.getElementById("explanation").style.visibility = "visible";
+      document.getElementById(
+        "explanation"
+      ).innerHTML = `<center>Step 4: IF A[MID] = VAL <br/>
+    SET POS = MID <br/>
+    PRINT POS<br/>
+    Go to Step 6<br/>
+    ELSE IF A[MID] > VAL<br/>
+    SET END = MID - 1<br/>
+    ELSE<br/>
+    SET BEG = MID + 1 <br/>
+    [END OF IF] <br/>
+    [END OF LOOP]</center>`;
+      last_p = last;
+      last = mid - 1;
+    }
 
-        if (mid == 0) {
-          document.getElementById("label1").innerHTML =
-            "Item Found at index :" + mid;
-        } else {
-          document.getElementById("label1").innerHTML =
-            "Item Found at index :" + (mid - 1);
-        }
+    if (start > last) {
+      document.getElementById("label1").style.color = "red";
+      document.getElementById("label1").innerHTML =
+        "Sorry  Item :  " + element + " not found in the given array  ";
+      bb++;
 
-        clearInterval(interval);
-      } else if (parseInt(arr[mid - 1]) < element && bb == 0) {
-        //right
-
-        document.getElementById("explanation").style.color = "red";
-        document.getElementById("explanation").innerHTML =
-          "Element " +
-          element +
-          " is greater than mid element <br/> Moving right and neglacting the left half part of array. ";
-        start_p = start;
-        start = mid + 1;
-      } else if (parseInt(arr[mid - 1]) > element && bb == 0) {
-        //left
-        // document.getElementById("explanation").style.color = "red";
-        document.getElementById("label1").innerHTML =
-          "Element " +
-          element +
-          " is less than mid element <br/> Moving left and neglacting the right half part of array. ";
-        last_p = last;
-        last = mid - 1;
-      }
-
-      if (
-        start >= last ||
-        mid == 1 ||
-        mid == parseInt(document.getElementById("length").value)
-      ) {
-        document.getElementById("label1").style.color = "red";
-        document.getElementById("label1").innerHTML =
-          "Sorry  Item :  " + element + " not found in the given array  ";
-        bb++;
-
-        clearInterval(interval);
-      }
-    }, start_time);
-
-    start_time = time + start_time;
+      clearInterval(interval);
+    }
   }
+  // }, start_time);
+
+  //start_time = time + start_time;
+  //}
 }
 
 //array print
 
 function execute() {
   ll = parseInt(document.getElementById("length").value);
+  last = parseInt(document.getElementById("length").value);
   var str = document.getElementById("array").value;
+  element = parseInt(document.getElementById("enter").value);
   arr = str.split(",");
   arr.sort((a, b) => a - b);
 
@@ -344,11 +363,13 @@ function input() {
     //hiding prev and next
     document.getElementById("prev").style.visibility = "hidden";
     document.getElementById("next").style.visibility = "hidden";
-
+    document.getElementById("h1").hidden = false;
+    document.getElementById("h2").hidden = false;
+    document.getElementById("input").scrollIntoView();
     //displaying the input tab
     var input = document.getElementById("input");
     input.className = input.className.replace(/\bhide\b/g, "show");
-
+    input.scrollIntoView();
     // hiding the start button
     var start = document.getElementById("start");
     start.className = start.className.replace(/\bshow\b/g, "hide");
@@ -363,6 +384,32 @@ function input() {
     $("#start-val").empty();
     $("#mid").empty();
     $("#last").empty();
+
+    //document.getElementById(
+    //"label1"
+    //).innerHTML = `[INITIALIZE] SET BEG = lower_bound
+    //END = upper_bound, POS = - 1`;
+
+    document.getElementById("explanation").innerHTML = `
+    Step 1: [INITIALIZE] SET BEG = lower_bound   <br/>  <br/>
+    END = upper_bound, POS = - 1   <br/>  <br/>
+    Step 2: Repeat Steps 3 and 4 while BEG <=END  <br/>  <br/>
+    Step 3: SET MID = (BEG + END)/2  <br/>  <br/>
+    Step 4: IF A[MID] = VAL  <br/>  <br/>
+    SET POS = MID  <br/>  <br/>
+    PRINT POS  <br/>  <br/>
+    Go to Step 6  <br/>  <br/>
+    ELSE IF A[MID] > VAL  <br/>  <br/>
+    SET END = MID - 1  <br/>  <br/>
+    ELSE   <br/>  <br/>
+    SET BEG = MID + 1    <br/><br/>
+    [END OF IF]  <br/>  <br/>
+    [END OF LOOP]  <br/>  <br/>
+    Step 5: IF POS = -1  <br/>  <br/>
+    PRINT "VALUE IS NOT PRESENT IN THE ARRAY"   <br/> <br/>
+    [END OF IF] <br/>  <br/>
+    Step 6: EXIT <br/>  <br/>
+`;
   } else {
     reset();
   }
